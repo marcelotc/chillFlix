@@ -104,7 +104,7 @@ const List = () => {
                     horizontal={true}
                     ItemSeparatorComponent={() => <View style={{ width: 5 }}></View>}
                     renderItem={({ item }) => renderItem(item)}
-                    data={shows_first}
+                    data={shows_second}
                 ></FlatList>
             </View>
 
