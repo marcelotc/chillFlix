@@ -7,7 +7,7 @@ import Menu from './components/Menu';
 
 import SideMenu from 'react-native-side-menu';
 
-const App = () => {
+const App = (props) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggle = () => {
@@ -26,7 +26,7 @@ const App = () => {
                 onChange={(isOpen) => updateMenu(isOpen)}
             >
                 <View style={[{ flex: 1 }, styles.container]}>
-                    <Header toggle={toggle}></Header>
+                    <Header navigator={props.navigator} toggle={toggle}></Header>
                     <Slide></Slide>
                     <List></List>
                 </View>

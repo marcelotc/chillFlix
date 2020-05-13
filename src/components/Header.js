@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -10,8 +10,10 @@ const Header = (props) => {
                 <Icon name="menu" color="#fff" size={30}></Icon>
             </TouchableWithoutFeedback>
             <Image style={styles.logo} source={require('../images/logo.png')}></Image>
-            <Icon name="search" color="#fff" size={30}></Icon>
-        </View>
+            <TouchableNativeFeedback onPress={() => props.navigator.push({ ident: 'Search' })}>
+                <Icon name="search" color="#fff" size={30}></Icon>
+            </TouchableNativeFeedback>
+        </View >
     )
 }
 
