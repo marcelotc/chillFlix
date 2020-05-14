@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import List from './components/List';
 import Slide from './components/Slider';
 import Header from './components/Header';
@@ -8,6 +8,8 @@ import Menu from './components/Menu';
 import SideMenu from 'react-native-side-menu';
 
 const App = (props) => {
+    console.disableYellowBox = true;
+
     const [isOpen, setIsOpen] = useState(false);
 
     const toggle = () => {
@@ -25,11 +27,11 @@ const App = (props) => {
                 isOpen={isOpen}
                 onChange={(isOpen) => updateMenu(isOpen)}
             >
-                <View style={[{ flex: 1 }, styles.container]}>
+                <ScrollView style={[{ flex: 1 }, styles.container]}>
                     <Header navigator={props.navigator} toggle={toggle}></Header>
                     <Slide></Slide>
                     <List></List>
-                </View>
+                </ScrollView>
             </SideMenu>
         </View>
     );
