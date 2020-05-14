@@ -30,7 +30,7 @@ const App = (props) => {
                 <ScrollView style={[{ flex: 1 }, styles.container]}>
                     <Header navigator={props.navigator} toggle={toggle}></Header>
                     <Slide></Slide>
-                    <List></List>
+                    <List navigator={props.navigator}></List>
                 </ScrollView>
             </SideMenu>
         </View>

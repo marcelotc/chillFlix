@@ -3,6 +3,7 @@ import { Navigator } from 'react-native-deprecated-custom-components';
 
 import App from './app';
 import Search from './components/Search';
+import Details from './components/Details';
 
 const IndexApp = () => {
 
@@ -17,6 +18,10 @@ const IndexApp = () => {
             case 'Search':
                 return (
                     <Search {...navigator}></Search>
+                )
+            case 'Details':
+                return (
+                    <Details {...navigator} {...route.passProps}></Details>
                 )
         }
     }
