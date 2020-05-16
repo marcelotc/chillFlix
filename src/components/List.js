@@ -421,7 +421,6 @@ const List = (props) => {
                 item
             }
         })
-        console.log(props)
     }
     const renderItem = (item) => {
         return (
