@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, FlatList, Image, TouchableWithoutFeedback } from 'react-native';
+import Orientation from 'react-native-orientation';
 
 const shows_first = [
     {
@@ -414,6 +415,11 @@ const shows_second = [
 ]
 
 const List = (props) => {
+
+    useEffect(() => {
+        Orientation.lockToPortrait();
+    }, [])
+
     const newPushContent = (item) => {
         props.navigator.push({
             ident: 'Details',

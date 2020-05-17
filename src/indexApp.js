@@ -4,6 +4,7 @@ import { Navigator } from 'react-native-deprecated-custom-components';
 import App from './app';
 import Search from './components/Search';
 import Details from './components/Details';
+import Video from './components/VideoPlayerView';
 
 const IndexApp = () => {
 
@@ -22,6 +23,10 @@ const IndexApp = () => {
             case 'Details':
                 return (
                     <Details {...navigator} {...route.passProps}></Details>
+                )
+            case 'Video':
+                return (
+                    <Video {...navigator} {...route.passProps}></Video>
                 )
         }
     }

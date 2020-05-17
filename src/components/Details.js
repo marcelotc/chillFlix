@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     Text,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TabsEpisodes from './TabsEpisodes';
+import Orientation from 'react-native-orientation';
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,12 +20,27 @@ const Details = (props) => {
     const { episodes } = props.item.details
     const { name } = props.item
     const { thumbnail, cast, description, year, creator, numOfEpisodes, season } = props.item.details
+
+    useEffect(() => {
+        Orientation.lockToPortrait();
+    })
+
+    const openVideo = () => {
+        Orientation.lockToLandscape();
+        props.navigator.push({
+            ident: 'Video',
+            passProps: {
+                title: name
+            }
+        });
+    }
+
     return (
         <ScrollView style={styles.container}>
             <ImageBackground style={styles.thumbnail} source={{ uri: thumbnail }}>
                 <View style={styles.buttonPlay}>
                     <TouchableWithoutFeedback
-                        onPress={null}>
+                        onPress={() => openVideo()}>
                         <View>
                             <Icon
                                 style={styles.iconPlay}
@@ -72,7 +88,7 @@ const Details = (props) => {
                 </View>
             </View>
             <TabsEpisodes data={episodes}></TabsEpisodes>
-        </ScrollView>
+        </ScrollView >
     )
 }
 
