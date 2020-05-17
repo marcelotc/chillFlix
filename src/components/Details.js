@@ -8,7 +8,8 @@ import {
     TouchableWithoutFeedback,
     ScrollView,
     Dimensions,
-    ImageBackground
+    ImageBackground,
+    Share
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TabsEpisodes from './TabsEpisodes';
@@ -33,6 +34,17 @@ const Details = (props) => {
                 title: name
             }
         });
+    }
+
+    const onShare = () => {
+        Share.share({
+            title: 'Designated survivor',
+            url: 'www.youtube.com',
+            message: 'Awesome tv show'
+        }, {
+            dialogTitle: 'Share this awesome content',
+            excludedActivityTypes: 'com.apple.UIKIT.activity.PostToTwitter'
+        })
     }
 
     return (
@@ -75,16 +87,17 @@ const Details = (props) => {
                         ></Icon>
                         <Text style={styles.text}>My List</Text>
                     </View>
-
-                    <View style={styles.myShareIcons}>
-                        <Icon
-                            name="share"
-                            color="#fff"
-                            size={30}
-                            style={styles.shareIcon}
-                        ></Icon>
-                        <Text style={styles.text}>Share</Text>
-                    </View>
+                    <TouchableHighlight onPress={() => onShare()}>
+                        <View style={styles.myShareIcons}>
+                            <Icon
+                                name="share"
+                                color="#fff"
+                                size={30}
+                                style={styles.shareIcon}
+                            ></Icon>
+                            <Text style={styles.text}>Share</Text>
+                        </View>
+                    </TouchableHighlight>
                 </View>
             </View>
             <TabsEpisodes data={episodes}></TabsEpisodes>
