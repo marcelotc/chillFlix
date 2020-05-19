@@ -1,53 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Dimensions, FlatList, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { getAll } from '../api/api';
 
 const { width, height } = Dimensions.get('window')
-
-const shows_first = [
-    {
-        key: 1,
-        name: 'Suits',
-        image: 'https://static.tvmaze.com/uploads/images/medium_portrait/0/2432.jpg'
-    },
-    {
-        key: 2,
-        name: 'Modern Family',
-        image: 'https://static.tvmaze.com/uploads/images/medium_portrait/0/628.jpg'
-    },
-    {
-        key: 3,
-        name: 'The Flash',
-        image: 'http://static.tvmaze.com/uploads/images/medium_portrait/129/323466.jpg'
-    },
-    {
-        key: 4,
-        name: 'SuperGirl',
-        image: 'http://static.tvmaze.com/uploads/images/medium_portrait/152/382219.jpg'
-    },
-    {
-        key: 5,
-        name: 'Suits',
-        image: 'http://static.tvmaze.com/uploads/images/medium_portrait/160/402351.jpg'
-    },
-    {
-        key: 6,
-        name: 'Elementary',
-        image: 'http://static.tvmaze.com/uploads/images/medium_portrait/0/1888.jpg'
-    },
-    {
-        key: 7,
-        name: 'Jack Irish',
-        image: 'http://static.tvmaze.com/uploads/images/medium_portrait/18/47317.jpg'
-    },
-]
 
 const Search = (props) => {
     const [text, setText] = useState('')
     const [data, setData] = useState('')
 
     const filter = (text) => {
-        const newData = shows_first.filter(function (item) {
+        const data = getAll();
+        const newData = data.filter(function (item) {
             const itemData = item.name.toUpperCase()
             const textData = text.toUpperCase()
             return itemData.indexOf(textData) > -1
