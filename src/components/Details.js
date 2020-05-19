@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TabsEpisodes from './TabsEpisodes';
+import * as Animatable from 'react-native-animatable';
 import Orientation from 'react-native-orientation';
 
 const { width, height } = Dimensions.get('window');
@@ -21,6 +22,9 @@ const Details = (props) => {
     const { episodes } = props.item.details
     const { name } = props.item
     const { thumbnail, cast, description, year, creator, numOfEpisodes, season } = props.item.details
+    const [measures, setMeasures] = useState(0);
+    const [header, setHeader] = useState(false);
+    const [animation, setAnimation] = useState('');
 
     useEffect(() => {
         Orientation.lockToPortrait();
@@ -47,67 +51,99 @@ const Details = (props) => {
         })
     }
 
+    const handleScroll = (event) => {
+        if (event.nativeEvent.contentOffset.y > measures) {
+            setAnimation('slideInDown')
+            setHeader(true)
+        } else {
+            setHeader(false)
+        }
+    }
+
     return (
-        <ScrollView style={styles.container}>
-            <ImageBackground style={styles.thumbnail} source={{ uri: thumbnail }}>
-                <View style={styles.buttonPlay}>
-                    <TouchableWithoutFeedback
-                        onPress={() => openVideo()}>
-                        <View>
-                            <Icon
-                                style={styles.iconPlay}
-                                name="play-circle-outline"
-                                color="#fff"
-                                size={90}></Icon>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-                <View style={styles.nameContainer}>
-                    <Text style={[styles.text, styles.titleShow]}>{name}</Text>
-                </View>
-            </ImageBackground>
-            <View style={styles.descriptionContainer}>
-                <View style={styles.subtitle}>
-                    <Text style={[styles.text, styles.subtitleText]}>{year}</Text>
-                    <Text style={[styles.text, styles.subtitleText]}>{numOfEpisodes}</Text>
-                    <Text style={[styles.text, styles.subtitleText]}>{season} Season</Text>
-                </View>
-                <View style={styles.description}>
-                    <Text style={[styles.text, styles.light]}>{description}</Text>
-                </View>
-                <Text style={[styles.text]}>Cast: {cast}</Text>
-                <Text style={[styles.text]}>Creator: {creator}</Text>
-                <View style={styles.shareListIcons}>
-                    <View style={styles.myListIcons}>
-                        <Icon
-                            name="check"
-                            color="#fff"
-                            size={30}
-                            style={styles.listIcons}
-                        ></Icon>
-                        <Text style={styles.text}>My List</Text>
+        <View style={{ flex: 1 }}>
+            {header ? <Animatable.View animation={animation} style={styles.header}>
+                <Text style={styles.headerText}>{name}</Text>
+            </Animatable.View> : null}
+            <ScrollView onScroll={(event) => handleScroll(event)} style={styles.container}>
+                <ImageBackground style={styles.thumbnail} source={{ uri: thumbnail }}>
+                    <View style={styles.buttonPlay}>
+                        <TouchableWithoutFeedback
+                            onPress={() => openVideo()}>
+                            <View>
+                                <Icon
+                                    style={styles.iconPlay}
+                                    name="play-circle-outline"
+                                    color="#fff"
+                                    size={90}></Icon>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
-                    <TouchableHighlight onPress={() => onShare()}>
-                        <View style={styles.myShareIcons}>
+                    <View style={styles.nameContainer}
+                        onLayout={({ nativeEvent }) => {
+                            setMeasures(nativeEvent.layout.y)
+                        }}
+                    >
+                        <Text style={[styles.text, styles.titleShow]}>{name}</Text>
+                    </View>
+                </ImageBackground>
+                <View style={styles.descriptionContainer}>
+                    <View style={styles.subtitle}>
+                        <Text style={[styles.text, styles.subtitleText]}>{year}</Text>
+                        <Text style={[styles.text, styles.subtitleText]}>{numOfEpisodes}</Text>
+                        <Text style={[styles.text, styles.subtitleText]}>{season} Season</Text>
+                    </View>
+                    <View style={styles.description}>
+                        <Text style={[styles.text, styles.light]}>{description}</Text>
+                    </View>
+                    <Text style={[styles.text]}>Cast: {cast}</Text>
+                    <Text style={[styles.text]}>Creator: {creator}</Text>
+                    <View style={styles.shareListIcons}>
+                        <View style={styles.myListIcons}>
                             <Icon
-                                name="share"
+                                name="check"
                                 color="#fff"
                                 size={30}
-                                style={styles.shareIcon}
+                                style={styles.listIcons}
                             ></Icon>
-                            <Text style={styles.text}>Share</Text>
+                            <Text style={styles.text}>My List</Text>
                         </View>
-                    </TouchableHighlight>
+                        <TouchableHighlight onPress={() => onShare()}>
+                            <View style={styles.myShareIcons}>
+                                <Icon
+                                    name="share"
+                                    color="#fff"
+                                    size={30}
+                                    style={styles.shareIcon}
+                                ></Icon>
+                                <Text style={styles.text}>Share</Text>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
                 </View>
-            </View>
-            <TabsEpisodes data={episodes}></TabsEpisodes>
-        </ScrollView >
+                <TabsEpisodes data={episodes}></TabsEpisodes>
+            </ScrollView >
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     nameContainer: {
         backgroundColor: 'transparent'
+    },
+    header: {
+        backgroundColor: '#181818',
+        paddingVertical: 10,
+        alignItems: 'center',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1
+    },
+    headerText: {
+        color: '#fff',
+        fontSize: 20
     },
     titleShow: {
         fontSize: 35,
