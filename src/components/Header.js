@@ -4,13 +4,15 @@ import { Text, View, Image, StyleSheet, TouchableWithoutFeedback, TouchableNativ
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Header = (props) => {
+    const { navigate } = props.navigation;
+
     return (
         <View style={styles.container}>
             <TouchableWithoutFeedback onPress={() => props.toggle()}>
                 <Icon name="menu" color="#fff" size={30}></Icon>
             </TouchableWithoutFeedback>
             <Image style={styles.logo} source={require('../images/logo.png')}></Image>
-            <TouchableNativeFeedback onPress={() => props.navigator.push({ ident: 'Search' })}>
+            <TouchableNativeFeedback onPress={() => navigate('Search')}>
                 <Icon name="search" color="#fff" size={30}></Icon>
             </TouchableNativeFeedback>
         </View >

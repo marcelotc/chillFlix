@@ -28,9 +28,9 @@ const App = (props) => {
                 onChange={(isOpen) => updateMenu(isOpen)}
             >
                 <ScrollView style={[{ flex: 1 }, styles.container]}>
-                    <Header navigator={props.navigator} toggle={toggle}></Header>
+                    <Header navigation={props.navigation} toggle={toggle}></Header>
                     <Slide></Slide>
-                    <List navigator={props.navigator}></List>
+                    <List navigation={props.navigation}></List>
                 </ScrollView>
             </SideMenu>
         </View>

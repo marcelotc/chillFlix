@@ -12,8 +12,9 @@ const VideoPlayerView = (props) => {
     }, [])
 
     const back = () => {
+        const { goBack } = props.navigation
         Orientation.lockToPortrait()
-        props.navigator.pop()
+        goBack();
     }
 
     return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Dimensions, FlatList, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, TextInput, Dimensions, FlatList, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getAll } from '../api/api';
 
@@ -26,8 +26,12 @@ const Search = (props) => {
     }
 
     const renderItem = (item) => {
+        const { navigate } = props.navigation;
+
         return (
-            <Image key={item.key} style={styles.image} source={{ uri: item.image }}></Image>
+            <TouchableWithoutFeedback onPress={() => navigate('Details', { item: item })} >
+                <Image style={{ width: 150, height: 200 }} source={{ uri: item.image }} />
+            </TouchableWithoutFeedback >
         )
     }
 

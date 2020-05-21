@@ -1,42 +1,30 @@
 import React from 'react';
-import { Navigator } from 'react-native-deprecated-custom-components';
 
 import App from './app';
 import Search from './components/Search';
 import Details from './components/Details';
 import Video from './components/VideoPlayerView';
 
-const IndexApp = () => {
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-    const renderScene = (route, navigator) => {
-        var navigator = { navigator }
+const Stack = createStackNavigator();
 
-        switch (route.ident) {
-            case 'App':
-                return (
-                    <App {...navigator}></App>
-                )
-            case 'Search':
-                return (
-                    <Search {...navigator}></Search>
-                )
-            case 'Details':
-                return (
-                    <Details {...navigator} {...route.passProps}></Details>
-                )
-            case 'Video':
-                return (
-                    <Video {...navigator} {...route.passProps}></Video>
-                )
-        }
-    }
+const indexApp = () => {
 
     return (
-        <Navigator
-            initialRoute={{ ident: 'App' }}
-            renderScene={renderScene}
-        ></Navigator>
+        <NavigationContainer>
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false
+                }}>
+                <Stack.Screen name="App" component={App} />
+                <Stack.Screen name="Details" component={Details} />
+                <Stack.Screen name="Video" component={Video} />
+                <Stack.Screen name="Search" component={Search} />
+            </Stack.Navigator>
+        </NavigationContainer>
     )
 }
 
-export default IndexApp
+export default indexApp

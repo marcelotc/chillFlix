@@ -18,10 +18,12 @@ const List = (props) => {
         })
     }
     const renderItem = (item) => {
+        const { navigate } = props.navigation;
+
         return (
-            <TouchableWithoutFeedback onPress={() => newPushContent(item)}>
+            <TouchableWithoutFeedback onPress={() => navigate('Details', { item: item })} >
                 <Image style={{ width: 150, height: 200 }} source={{ uri: item.image }} />
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback >
         )
     }
     return (

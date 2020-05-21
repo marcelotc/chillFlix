@@ -19,9 +19,11 @@ import Orientation from 'react-native-orientation';
 const { width, height } = Dimensions.get('window');
 
 const Details = (props) => {
-    const { episodes } = props.item.details
-    const { name } = props.item
-    const { thumbnail, cast, description, year, creator, numOfEpisodes, season } = props.item.details
+    const { navigate } = props.navigation
+    const { params } = props.route
+    const { episodes } = params.item.details
+    const { name } = params.item
+    const { thumbnail, cast, description, year, creator, numOfEpisodes, season } = params.item.details
     const [measures, setMeasures] = useState(0);
     const [header, setHeader] = useState(false);
     const [animation, setAnimation] = useState('');
@@ -29,16 +31,6 @@ const Details = (props) => {
     useEffect(() => {
         Orientation.lockToPortrait();
     })
-
-    const openVideo = () => {
-        Orientation.lockToLandscape();
-        props.navigator.push({
-            ident: 'Video',
-            passProps: {
-                title: name
-            }
-        });
-    }
 
     const onShare = () => {
         Share.share({
@@ -69,7 +61,7 @@ const Details = (props) => {
                 <ImageBackground style={styles.thumbnail} source={{ uri: thumbnail }}>
                     <View style={styles.buttonPlay}>
                         <TouchableWithoutFeedback
-                            onPress={() => openVideo()}>
+                            onPress={() => navigate('Video', { name: name })}>
                             <View>
                                 <Icon
                                     style={styles.iconPlay}
