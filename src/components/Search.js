@@ -9,6 +9,8 @@ const Search = (props) => {
     const [text, setText] = useState('')
     const [data, setData] = useState('')
 
+    const { navigate } = props.navigation;
+
     const filter = (text) => {
         const data = getAll();
         const newData = data.filter(function (item) {
@@ -26,7 +28,6 @@ const Search = (props) => {
     }
 
     const renderItem = (item) => {
-        const { navigate } = props.navigation;
 
         return (
             <TouchableWithoutFeedback onPress={() => navigate('Details', { item: item })} >
@@ -58,7 +59,7 @@ const Search = (props) => {
                         ></Icon>
                     </TouchableOpacity>
                     : null}
-                <TouchableOpacity style={styles.cancelButton} onPress={() => props.navigator.pop()}>
+                <TouchableOpacity style={styles.cancelButton} onPress={() => navigate('App')}>
                     <View style={styles.containerButton}>
                         <Text style={styles.cancelButtonText}>Cancelar</Text>
                     </View>

@@ -3,31 +3,45 @@ import {
     View,
     Text,
     StyleSheet,
-    Image,
     TouchableHighlight,
     TouchableWithoutFeedback,
-    ScrollView,
     Dimensions,
     ImageBackground,
-    Share
+    Share,
+    Animated
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TabsEpisodes from './TabsEpisodes';
-import * as Animatable from 'react-native-animatable';
 import Orientation from 'react-native-orientation';
 
 const { width, height } = Dimensions.get('window');
 
 const Details = (props) => {
-    const { navigate } = props.navigation
+    const { navigate, goBack } = props.navigation
     const { params } = props.route
     const { episodes } = params.item.details
     const { name } = params.item
     const { thumbnail, cast, description, year, creator, numOfEpisodes, season } = params.item.details
-    const [measures, setMeasures] = useState(0);
-    const [header, setHeader] = useState(false);
-    const [animation, setAnimation] = useState('');
+    const [measuresTitle, setMeasuresTitle] = useState(0);
+    const [measuresSeason, setMeasuresSeason] = useState(0);
+    const [scrollY, setScrollY] = useState(new Animated.Value(0));
 
+    const headerNameToggle = scrollY.interpolate({
+        inputRange: [measuresTitle, measuresTitle + 1],
+        outputRange: [0, 1]
+    })
+    const headerSeasonHide = scrollY.interpolate({
+        inputRange: [
+            measuresSeason - 1,
+            measuresSeason,
+            measuresSeason + 1
+        ],
+        outputRange: [-width, 0, 0]
+    })
+    const headerSeasonToggle = scrollY.interpolate({
+        inputRange: [measuresSeason, measuresSeason + 1],
+        outputRange: [0, 1]
+    })
     useEffect(() => {
         Orientation.lockToPortrait();
     })
@@ -43,21 +57,36 @@ const Details = (props) => {
         })
     }
 
-    const handleScroll = (event) => {
-        if (event.nativeEvent.contentOffset.y > measures) {
-            setAnimation('slideInDown')
-            setHeader(true)
-        } else {
-            setHeader(false)
-        }
-    }
-
     return (
         <View style={{ flex: 1 }}>
-            {header ? <Animatable.View animation={animation} style={styles.header}>
+            <TouchableHighlight
+                style={styles.closeButton}
+                onPress={() => goBack()}
+            >
+                <Icon
+                    name="close"
+                    color="white"
+                    size={22}
+                />
+            </TouchableHighlight>
+            <Animated.View style={[styles.header, { opacity: headerNameToggle }]}>
                 <Text style={styles.headerText}>{name}</Text>
-            </Animatable.View> : null}
-            <ScrollView onScroll={(event) => handleScroll(event)} style={styles.container}>
+            </Animated.View>
+            <Animated.View
+                style={[styles.header, {
+                    opacity: headerSeasonToggle,
+                    transform: [{ translateY: 0 }, { translateX: headerSeasonHide }]
+                }]}>
+                <Text style={styles.headerText}>Season 1</Text>
+            </Animated.View>
+            <Animated.ScrollView
+                scrollEventThrottle={1}
+                onScroll={
+                    Animated.event(
+                        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                        { useNativeDriver: true }
+                    )
+                } style={styles.container}>
                 <ImageBackground style={styles.thumbnail} source={{ uri: thumbnail }}>
                     <View style={styles.buttonPlay}>
                         <TouchableWithoutFeedback
@@ -73,7 +102,7 @@ const Details = (props) => {
                     </View>
                     <View style={styles.nameContainer}
                         onLayout={({ nativeEvent }) => {
-                            setMeasures(nativeEvent.layout.y)
+                            setMeasuresTitle(nativeEvent.layout.y)
                         }}
                     >
                         <Text style={[styles.text, styles.titleShow]}>{name}</Text>
@@ -113,8 +142,12 @@ const Details = (props) => {
                         </TouchableHighlight>
                     </View>
                 </View>
-                <TabsEpisodes data={episodes}></TabsEpisodes>
-            </ScrollView >
+                <View onLayout={({ nativeEvent }) => {
+                    setMeasuresSeason(nativeEvent.layout.y + 1)
+                }}>
+                    <TabsEpisodes data={episodes}></TabsEpisodes>
+                </View>
+            </Animated.ScrollView >
         </View>
     )
 }
@@ -201,7 +234,13 @@ const styles = StyleSheet.create({
     },
     light: {
         fontWeight: '200',
-    }
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 15,
+        right: 10,
+        zIndex: 2
+    },
 })
 
 export default Details;
